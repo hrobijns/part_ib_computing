@@ -15,7 +15,7 @@ class Planet:
 def gravitational_force(m1, m2, r):
     # calculate gravitational force between two masses
     force_magnitude = G * (m1 * m2) / r**2
-    force_direction = r / np.linalg.norm(r)
+    force_direction = - r / np.linalg.norm(r)
     force = force_magnitude * force_direction
     return force
 
@@ -52,11 +52,11 @@ def update(frame):
 sun = Planet(mass=1.989e30, position=[0, 0], velocity=[0, 0])
 
 # create a planet (e.g., Earth)
-earth = Planet(mass=5.972e24, position=[1.5e11, 0], velocity=[0, 30000])
+earth = Planet(mass=5.972e24, position=[1.5e11, 0], velocity=[0, 40000])
 
 # set up the simulation parameters
 planets = [sun, earth]
-dt = 60*60  # time step size in seconds
+dt = 60*60*6  # time step size in seconds
 
 # set up the plot
 fig, ax = plt.subplots()
