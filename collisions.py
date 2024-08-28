@@ -102,5 +102,4 @@ def update(frame):
     return ball1_patch, ball2_patch, ball3_patch
 
 ani = animation.FuncAnimation(fig, update, frames=num_steps, interval=dt*1000, blit=True)
-
 plt.show()

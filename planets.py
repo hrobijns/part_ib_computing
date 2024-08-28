@@ -1,69 +1,59 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+import matplotlib.animation as animation
 
 # constants
-G = 6.67430e-11  # m^3 kg^-1 s^-2
+G = 6.67430e-11  # gravitational constant (m^3 kg^-1 s^-2)
+M_sun = 1.989e30  # mass of the sun (kg)
+dt = 60 * 60   # time step (seconds)
+planet_radius = 0.5e10  # visualization size of the planet
+sun_radius = 1.0e10  # visualization size of the sun
+num_steps = 1000 # frames in the simulation
 
-# planet class
 class Planet:
-    def __init__(self, mass, position, velocity):
-        self.mass = mass
+    def __init__(self, position, velocity, mass, radius, color):
         self.position = np.array(position, dtype=float)
         self.velocity = np.array(velocity, dtype=float)
+        self.mass = mass
+        self.radius = radius
+        self.color = color
 
-def gravitational_force(m1, m2, r):
-    # calculate gravitational force between two masses
-    force_magnitude = G * (m1 * m2) / r**2
-    force_direction = - r / np.linalg.norm(r)
-    force = force_magnitude * force_direction
-    return force
+    def move(self):
+        r = np.linalg.norm(self.position)
+        force_magnitude = G * M_sun * self.mass / r**2
+        force_direction = -self.position / r
+        acceleration = force_magnitude * force_direction / self.mass
+        self.velocity += acceleration * dt
+        self.position += self.velocity * dt
 
-def update_position_velocity(planet, force, dt):
-    # update position and velocity using Euler's method
-    acceleration = force / planet.mass
-    planet.velocity += acceleration * dt
-    planet.position += planet.velocity * dt
-
-# function to initialize the plot
-def init():
-    ax.set_xlim(-2e11, 2e11)
-    ax.set_ylim(-2e11, 2e11)
-    return []
-
-# function to update the plot for each animation frame
-def update(frame):
-    for planet in planets:
-        # calculate net force on the planet
-        net_force = np.array([0.0, 0.0])
-        for other_planet in planets:
-            if other_planet != planet:
-                r = other_planet.position - planet.position
-                force = gravitational_force(planet.mass, other_planet.mass, np.linalg.norm(r))
-                net_force += force
-        # update position and velocity
-        update_position_velocity(planet, net_force, dt)
-
-    # update plot data
-    lines.set_data([planet.position[0] for planet in planets], [planet.position[1] for planet in planets])
-    return lines,
-
-# create a Sun
-sun = Planet(mass=1.989e30, position=[0, 0], velocity=[0, 0])
-
-# create a planet (e.g., Earth)
-earth = Planet(mass=5.972e24, position=[1.5e11, 0], velocity=[0, 40000])
-
-# set up the simulation parameters
-planets = [sun, earth]
-dt = 60*60*6  # time step size in seconds
+# initialize the planet with specific initial conditions
+planet = Planet(
+    position=[1.496e11, 0],  # initial position (meters)
+    velocity=[0, 29783],     # initial velocity (meters/second)
+    mass=5.972e24,           # mass of the planet (kg)
+    radius=planet_radius,   
+    color='#862323'
+)
 
 # set up the plot
 fig, ax = plt.subplots()
-lines, = ax.plot([], [], 'o', markersize=10)
+ax.set_xlim(-2e11, 2e11)
+ax.set_ylim(-2e11, 2e11)
+ax.set_aspect('equal', 'box')
+ax.set_xticks([])
+ax.set_yticks([])
 
-# create the animation
-animation = FuncAnimation(fig, update, frames=range(500), init_func=init, blit=True, interval=50)
+planet_patch = plt.Circle(planet.position, planet.radius, color=planet.color)
+sun_patch = plt.Circle((0, 0), sun_radius, color='#FFCA00')
 
-# show the animation
+ax.add_patch(planet_patch)
+ax.add_patch(sun_patch)
+
+# animation
+def update(frame):
+    planet.move()
+    planet_patch.set_center(planet.position)
+    return planet_patch,
+
+ani = animation.FuncAnimation(fig, update, frames=num_steps, interval=dt*0.001, blit=True)
 plt.show()
