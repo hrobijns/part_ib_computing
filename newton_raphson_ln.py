@@ -1,5 +1,4 @@
 import math as m
-import numpy as np
 
 def newton_raphson_ln(number, initial_guess=1.0, tolerance=1e-10, max_iterations=100):
     guess = initial_guess

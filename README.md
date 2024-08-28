@@ -3,9 +3,6 @@ Scripts for the part IB computing source, followed during second year of Cambrid
 
 ## Contents:
 
-##### requirements.txt:
-- text file containing required software to run files in this repository.
-
 ### Simple introductory scripts:
 A few very simple scripts that were completed alongside the course.
 
