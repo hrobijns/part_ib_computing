@@ -6,7 +6,8 @@ Scripts for the part IB computing source, followed during second year of Cambrid
 ##### requirements.txt:
 - text file containing required software to run files in this repository.
 
-### Simple introductory scripts
+### Simple introductory scripts:
+A few very simple scripts that were completed alongside the course.
 
 ##### BMI.py:
 - script which lets the user calculate their BMI given metric or imperial inputs of height and weight.
@@ -20,7 +21,8 @@ Scripts for the part IB computing source, followed during second year of Cambrid
 ##### newton_raphson_ln.py:
 - script that uses the Newton-Raphson method to approximate ln(x) for any x.
 
-### Simulations
+### Simulations:
+The final two scripts, which were slightly more involved simulations of simple physics phenomena.
 
 ##### planets.py:
 - uses Newton's Law of Gravitation to simulate a planet orbiting a sun.
